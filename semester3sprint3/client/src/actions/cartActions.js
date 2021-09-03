@@ -1,0 +1,28 @@
+export const addToCart = (pizza, quantity, variant) => (dispatch, getState) => {
+  const cartItem = {
+    name: pizza.name,
+    _id: pizza._id,
+    image: pizza.image,
+    variant: variant,
+    quantity: Number(quantity),
+    prices: pizza.prices,
+    price: pizza.prices[0][variant] * quantity,
+  };
+  if (cartItem.quantity > 10) {
+    alert("You cannot add more than 15, if trying to add more then 15 please see an doctor. Damn");
+  } else {
+    if (cartItem.quantity < 1) {
+      dispatch({ type: "DELETE_FROM_CART", payload: pizza });
+    } else {
+      dispatch({ type: "ADD_TO_CART", payload: cartItem });
+    }
+  }
+  const cartItems = getState().cartReducer.cartItems;
+  localStorage.setItem("cartItems", JSON.stringify(cartItems));
+};
+
+export const deleteFromCart = pizza => (dispatch, getState) => {
+  dispatch({ type: "DELETE_FROM_CART", payload: pizza });
+  const cartItems = getState().cartReducer.cartItems;
+  localStorage.setItem("cartItems", JSON.stringify(cartItems));
+};
